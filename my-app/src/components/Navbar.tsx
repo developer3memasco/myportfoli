@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import profileImg from "../../public/profile.png";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Sparkles,
@@ -74,7 +75,7 @@ export const Navbar: React.FC = () => {
         >
           <div className="relative flex items-center justify-center w-9 h-9 rounded-xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-cyan-400 p-[1.5px] transition-transform duration-300 group-hover:scale-105 shadow-[0_0_20px_rgba(168,85,247,0.35)] overflow-hidden">
             <Image
-              src="/profile.png"
+              src={profileImg}
               alt="Anish Sharma"
               width={36}
               height={36}
