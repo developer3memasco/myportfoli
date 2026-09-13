@@ -110,12 +110,12 @@ export const AIChatPreview: React.FC = () => {
         match = foundKey
           ? knowledgeBase[foundKey]
           : {
-              text: `Anish Sharma is a Full Stack Web Developer and React.js Specialist from Dhanbad, India. He builds responsive web applications with React.js, Next.js, Node.js, Express, and MongoDB/SQL. You can reach out directly at anish947173@gmail.com!`,
-              actions: [
-                { label: "View Projects", href: "#projects" },
-                { label: "Send Message", href: "#contact" },
-              ],
-            };
+            text: `Anish Sharma is a Full Stack Web Developer and React.js Specialist from Dhanbad, India. He builds responsive web applications with React.js, Next.js, Node.js, Express, and MongoDB/SQL. You can reach out directly at anish947173@gmail.com!`,
+            actions: [
+              { label: "View Projects", href: "#projects" },
+              { label: "Send Message", href: "#contact" },
+            ],
+          };
       }
 
       const botMsg: Message = {
@@ -238,17 +238,15 @@ export const AIChatPreview: React.FC = () => {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.25 }}
-                  className={`flex items-start gap-3 ${
-                    msg.sender === "user" ? "flex-row-reverse" : "flex-row"
-                  }`}
+                  className={`flex items-start gap-3 ${msg.sender === "user" ? "flex-row-reverse" : "flex-row"
+                    }`}
                 >
                   {/* Avatar */}
                   <div
-                    className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${
-                      msg.sender === "user"
+                    className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${msg.sender === "user"
                         ? "bg-purple-600 text-white shadow-[0_0_10px_rgba(168,85,247,0.4)]"
                         : "bg-[#161826] border border-cyan-500/30 text-cyan-300"
-                    }`}
+                      }`}
                   >
                     {msg.sender === "user" ? (
                       <User className="w-4 h-4" />
@@ -259,11 +257,10 @@ export const AIChatPreview: React.FC = () => {
 
                   {/* Message Bubble */}
                   <div
-                    className={`max-w-[85%] sm:max-w-[75%] rounded-2xl p-4 ${
-                      msg.sender === "user"
+                    className={`max-w-[85%] sm:max-w-[75%] rounded-2xl p-4 ${msg.sender === "user"
                         ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-tr-sm shadow-md"
                         : "bg-[#131522] border border-white/8 text-zinc-200 rounded-tl-sm shadow-inner"
-                    }`}
+                      }`}
                   >
                     <p className="whitespace-pre-wrap leading-relaxed text-xs sm:text-sm">
                       {msg.text}
@@ -336,7 +333,7 @@ export const AIChatPreview: React.FC = () => {
           {/* Chat Input Bar */}
           <div className="p-4 bg-[#10111e] border-t border-white/8">
             <form
-              onSubmit={(e) => {
+              onSubmit={(e: { preventDefault: () => void; }) => {
                 e.preventDefault();
                 handleSend();
               }}
@@ -345,7 +342,9 @@ export const AIChatPreview: React.FC = () => {
               <input
                 type="text"
                 value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
+                onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => {
+                  setInputValue(e.target.value);
+                }}
                 placeholder="Ask about Anish's React projects, full-stack experience, or availability..."
                 className="flex-1 bg-transparent px-3 py-2 text-xs sm:text-sm text-white placeholder-zinc-500 focus:outline-none"
               />

@@ -232,7 +232,7 @@ export const Contact: React.FC = () => {
                           type="text"
                           required
                           value={formData.name}
-                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                          onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, name: e.target.value })}
                           placeholder="John Doe"
                           className="w-full px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-purple-500/60 focus:bg-white/[0.05] transition-all"
                         />
@@ -245,7 +245,7 @@ export const Contact: React.FC = () => {
                           type="email"
                           required
                           value={formData.email}
-                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                          onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, email: e.target.value })}
                           placeholder="john@company.com"
                           className="w-full px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-purple-500/60 focus:bg-white/[0.05] transition-all"
                         />
@@ -259,7 +259,7 @@ export const Contact: React.FC = () => {
                         </label>
                         <select
                           value={formData.projectType}
-                          onChange={(e) => setFormData({ ...formData, projectType: e.target.value })}
+                          onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, projectType: e.target.value })}
                           className="w-full px-4 py-2.5 rounded-xl bg-[#11121d] border border-white/10 text-xs text-white focus:outline-none focus:border-purple-500/60 transition-all"
                         >
                           <option>Full-Time / Software Engineer Role</option>
@@ -276,7 +276,7 @@ export const Contact: React.FC = () => {
                         </label>
                         <select
                           value={formData.budget}
-                          onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
+                          onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, budget: e.target.value })}
                           className="w-full px-4 py-2.5 rounded-xl bg-[#11121d] border border-white/10 text-xs text-white focus:outline-none focus:border-purple-500/60 transition-all"
                         >
                           <option>Immediate / Full-Time Employment</option>
@@ -295,7 +295,7 @@ export const Contact: React.FC = () => {
                         required
                         rows={4}
                         value={formData.message}
-                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                        onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, message: e.target.value })}
                         placeholder="Tell Anish about your company, project requirements, or opportunity..."
                         className="w-full px-4 py-3 rounded-xl bg-white/[0.03] border border-white/10 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-purple-500/60 focus:bg-white/[0.05] transition-all resize-none"
                       />
