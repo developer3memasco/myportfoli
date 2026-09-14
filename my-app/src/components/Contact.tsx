@@ -29,6 +29,8 @@ export const Contact: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const handleCopyEmail = () => {
     navigator.clipboard.writeText("anish947173@gmail.com");
     setCopiedEmail(true);
@@ -41,13 +43,28 @@ export const Contact: React.FC = () => {
     setTimeout(() => setCopiedPhone(false), 2500);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) return;
 
     setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
+    setErrorMessage(null);
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || "Failed to send message. Please try again.");
+      }
+
       setIsSubmitted(true);
       setFormData({
         name: "",
@@ -56,7 +73,12 @@ export const Contact: React.FC = () => {
         budget: "$1k - $5k",
         message: "",
       });
-    }, 1200);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Something went wrong. Please try again.";
+      setErrorMessage(msg);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -300,6 +322,12 @@ export const Contact: React.FC = () => {
                         className="w-full px-4 py-3 rounded-xl bg-white/[0.03] border border-white/10 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-purple-500/60 focus:bg-white/[0.05] transition-all resize-none"
                       />
                     </div>
+
+                    {errorMessage && (
+                      <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs flex items-center gap-2">
+                        <span>⚠️ {errorMessage}</span>
+                      </div>
+                    )}
 
                     <button
                       type="submit"

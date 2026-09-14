@@ -73,7 +73,7 @@ export const About: React.FC = () => {
                 
                 <div className="relative w-full h-full rounded-2xl bg-[#090a12] border-2 border-purple-500/40 overflow-hidden shadow-2xl flex flex-col justify-end">
                   <Image
-                    src="/profile.png"
+                    src="/anish.png"
                     alt="Anish Sharma - Full Stack Developer"
                     fill
                     sizes="(max-width: 640px) 240px, 280px"

@@ -44,9 +44,9 @@ const projectsData: Project[] = [
       "Designed and developed a responsive viral landing page built for maximum campaign engagement and rapid user acquisition.",
     longDescription:
       "Engineered with React.js and CSS3 with optimized asset loading, silky 60fps animations, DOM rendering optimizations for mobile devices, interactive lead capture forms, and analytics tracking.",
-    tags: ["React.js", "High-Conversion UX", "CSS3", "JavaScript (ES6+)", "Lead Capture", "Responsive Design"],
+    tags: ["React.js", "Next.js", "High-Conversion UX", "CSS3", "Lead Capture", "Responsive Design"],
     metrics: { label: "Engagement", value: "High Conversion" },
-    demoUrl: "https://rajviral.com",
+    demoUrl: "/viralgaraj",
     githubUrl: "https://github.com/anish-sharma",
     gradient: "from-purple-900/40 via-indigo-900/30 to-violet-950/50",
     accentBorder: "group-hover:border-purple-500/50",
