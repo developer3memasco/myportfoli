@@ -1,3 +1,4 @@
+import React from "react";
 import { AmbientBackground } from "@/components/AmbientBackground";
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
