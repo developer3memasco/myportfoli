@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Bot,
@@ -175,23 +176,33 @@ export const AIChatPreview: React.FC = () => {
           {/* Top Chat Bar */}
           <div className="p-4 bg-[#10111e] border-b border-white/8 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="relative">
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-purple-600 p-[1px] flex items-center justify-center">
-                  <div className="w-full h-full bg-[#0a0b12] rounded-[11px] flex items-center justify-center">
-                    <Bot className="w-5 h-5 text-cyan-300" />
+              {/* Profile Image Avatar with Status Indicator */}
+              <div className="relative group">
+                <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-tr from-cyan-500 via-purple-600 to-pink-500 p-[2px] flex items-center justify-center shadow-[0_0_20px_rgba(56,189,248,0.35)] transition-transform duration-300 group-hover:scale-105">
+                  <div className="w-full h-full rounded-[14px] overflow-hidden bg-[#0a0b12] relative">
+                    <Image
+                      src="/anish.png"
+                      alt="Anish Sharma - AI Assistant"
+                      width={44}
+                      height={44}
+                      className="w-full h-full object-cover object-top"
+                      priority
+                    />
                   </div>
                 </div>
-                <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-[#0c0d16]" />
+                {/* Live Online Badge */}
+                <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-400 border-2 border-[#0c0d16] shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
               </div>
+
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-bold text-white">Anish AI Assistant</span>
+                  <span className="text-sm font-bold text-white tracking-tight">Anish AI Assistant</span>
                   <span className="text-[10px] font-mono bg-cyan-500/15 text-cyan-300 px-1.5 py-0.5 rounded border border-cyan-500/25">
                     v2.4-active
                   </span>
                 </div>
                 <div className="flex items-center gap-2 text-[11px] text-zinc-400">
-                  <span className="flex items-center gap-1 text-emerald-400">
+                  <span className="flex items-center gap-1 text-emerald-400 font-medium">
                     <Zap className="w-3 h-3" />
                     Real-time response
                   </span>
@@ -241,17 +252,26 @@ export const AIChatPreview: React.FC = () => {
                   className={`flex items-start gap-3 ${msg.sender === "user" ? "flex-row-reverse" : "flex-row"
                     }`}
                 >
-                  {/* Avatar */}
+                  {/* Avatar Container */}
                   <div
-                    className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${msg.sender === "user"
-                        ? "bg-purple-600 text-white shadow-[0_0_10px_rgba(168,85,247,0.4)]"
-                        : "bg-[#161826] border border-cyan-500/30 text-cyan-300"
-                      }`}
+                    className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 overflow-hidden shadow-md ${
+                      msg.sender === "user"
+                        ? "bg-purple-600 text-white shadow-[0_0_12px_rgba(168,85,247,0.4)]"
+                        : "p-[1px] bg-gradient-to-tr from-cyan-500 to-purple-600 shadow-[0_0_12px_rgba(56,189,248,0.3)]"
+                    }`}
                   >
                     {msg.sender === "user" ? (
                       <User className="w-4 h-4" />
                     ) : (
-                      <Bot className="w-4 h-4" />
+                      <div className="w-full h-full rounded-[11px] overflow-hidden bg-[#0c0d16] relative">
+                        <Image
+                          src="/anish.png"
+                          alt="Anish"
+                          width={32}
+                          height={32}
+                          className="w-full h-full object-cover object-top"
+                        />
+                      </div>
                     )}
                   </div>
 

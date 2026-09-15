@@ -36,7 +36,7 @@ export const Hero: React.FC = () => {
         >
           <div className="w-5 h-5 rounded-full overflow-hidden border border-purple-400/60 relative shrink-0">
             <Image
-              src={profileImg}
+              src="/anish.png"
               alt="Anish Sharma"
               width={20}
               height={20}

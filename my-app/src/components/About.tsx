@@ -2,7 +2,6 @@
 
 import React from "react";
 import Image from "next/image";
-import profileImg from "../../public/profile.png";
 import { motion } from "framer-motion";
 import {
   GraduationCap,
@@ -71,10 +70,10 @@ export const About: React.FC = () => {
               {/* Actual Portrait Photo with Holographic Neon Rings */}
               <div className="relative mx-auto w-56 h-72 sm:w-64 sm:h-80 rounded-2xl flex items-center justify-center p-1.5 mb-6 group">
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-cyan-500 animate-pulse-slow opacity-80 blur-md" />
-                
+
                 <div className="relative w-full h-full rounded-2xl bg-[#090a12] border-2 border-purple-500/40 overflow-hidden shadow-2xl flex flex-col justify-end">
                   <Image
-                    src={profileImg}
+                    src="/anish.png"
                     alt="Anish Sharma - Full Stack Developer"
                     fill
                     sizes="(max-width: 640px) 240px, 280px"
