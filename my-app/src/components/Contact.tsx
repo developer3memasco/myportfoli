@@ -51,19 +51,15 @@ export const Contact: React.FC = () => {
     setErrorMessage(null);
 
     try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      // Direct mailto generation for static portfolio export
+      const mailtoUrl = `mailto:anish947173@gmail.com?subject=${encodeURIComponent(
+        `Portfolio Inquiry: ${formData.projectType} from ${formData.name}`
+      )}&body=${encodeURIComponent(
+        `Hi Anish,\n\nMy name is ${formData.name} (${formData.email}).\nProject Type: ${formData.projectType}\nBudget: ${formData.budget}\n\nMessage:\n${formData.message}`
+      )}`;
 
-      const data = await res.json();
-
-      if (!res.ok || !data.success) {
-        throw new Error(data.error || "Failed to send message. Please try again.");
-      }
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      window.open(mailtoUrl, "_blank");
 
       setIsSubmitted(true);
       setFormData({
