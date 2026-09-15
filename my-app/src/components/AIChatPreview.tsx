@@ -254,18 +254,11 @@ export const AIChatPreview: React.FC = () => {
                 >
                   {/* Avatar Container */}
                   <div
-<<<<<<< HEAD
                     className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 overflow-hidden shadow-md ${
                       msg.sender === "user"
                         ? "bg-purple-600 text-white shadow-[0_0_12px_rgba(168,85,247,0.4)]"
                         : "p-[1px] bg-gradient-to-tr from-cyan-500 to-purple-600 shadow-[0_0_12px_rgba(56,189,248,0.3)]"
                     }`}
-=======
-                    className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${msg.sender === "user"
-                        ? "bg-purple-600 text-white shadow-[0_0_10px_rgba(168,85,247,0.4)]"
-                        : "bg-[#161826] border border-cyan-500/30 text-cyan-300"
-                      }`}
->>>>>>> origin/main
                   >
                     {msg.sender === "user" ? (
                       <User className="w-4 h-4" />

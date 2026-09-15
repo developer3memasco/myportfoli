@@ -3,16 +3,13 @@ import type { NextConfig } from "next";
 const isGithubActions = process.env.GITHUB_ACTIONS || false;
 
 const nextConfig: NextConfig = {
-<<<<<<< HEAD
-=======
-  output: "export",
-  basePath: isGithubActions ? "/myportfoli" : "",
-  images: {
-    unoptimized: true,
-  },
->>>>>>> origin/main
+  ...(isGithubActions && {
+    output: "export",
+    basePath: "/myportfoli",
+  }),
   reactCompiler: true,
   images: {
+    unoptimized: Boolean(isGithubActions),
     remotePatterns: [
       {
         protocol: "https",

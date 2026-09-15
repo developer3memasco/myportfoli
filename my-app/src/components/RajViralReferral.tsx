@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -146,8 +146,13 @@ export const RajViralReferral: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [timeFilter, setTimeFilter] = useState<"weekly" | "allTime">("weekly");
   const [showSimulateToast, setShowSimulateToast] = useState(false);
+  const [referralLink, setReferralLink] = useState(`/rajviral?ref=${referralCode}`);
 
-  const referralLink = `https://rajviral.com/invite/${referralCode}`;
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setReferralLink(`${window.location.origin}/rajviral?ref=${referralCode}`);
+    }
+  }, [referralCode]);
 
   const nextTier = tiersList.find((t) => referralCount < t.threshold) || tiersList[tiersList.length - 1];
   const currentTier = tiersList.filter((t) => referralCount >= t.threshold).slice(-1)[0] || tiersList[0];
