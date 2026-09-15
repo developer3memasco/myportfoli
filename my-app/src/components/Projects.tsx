@@ -168,11 +168,10 @@ export const Projects: React.FC = () => {
               <button
                 key={tab.id}
                 onClick={() => setActiveFilter(tab.id as any)}
-                className={`relative px-4 py-2 rounded-full text-xs font-medium transition-all ${
-                  isSelected
+                className={`relative px-4 py-2 rounded-full text-xs font-medium transition-all ${isSelected
                     ? "text-white font-semibold"
                     : "text-zinc-400 hover:text-zinc-200 hover:bg-white/5"
-                }`}
+                  }`}
               >
                 {isSelected && (
                   <motion.div
