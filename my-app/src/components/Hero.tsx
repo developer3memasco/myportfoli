@@ -2,7 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
-import profileImg from "../../public/profile.png";
+import anishImg from "../../public/anish.png";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
@@ -36,7 +36,7 @@ export const Hero: React.FC = () => {
         >
           <div className="w-5 h-5 rounded-full overflow-hidden border border-purple-400/60 relative shrink-0">
             <Image
-              src="/anish.png"
+              src={anishImg}
               alt="Anish Sharma"
               width={20}
               height={20}

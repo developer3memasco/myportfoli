@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
   }),
   reactCompiler: true,
   images: {
-    unoptimized: Boolean(isGithubActions),
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",

@@ -51,15 +51,35 @@ export const Contact: React.FC = () => {
     setErrorMessage(null);
 
     try {
-      // Direct mailto generation for static portfolio export (GitHub Pages compatible)
-      const mailtoUrl = `mailto:anish947173@gmail.com?subject=${encodeURIComponent(
-        `Portfolio Inquiry: ${formData.projectType} from ${formData.name}`
-      )}&body=${encodeURIComponent(
-        `Hi Anish,\n\nMy name is ${formData.name} (${formData.email}).\nProject Type: ${formData.projectType}\nBudget: ${formData.budget}\n\nMessage:\n${formData.message}`
-      )}`;
+      let savedToDb = false;
+      try {
+        const response = await fetch("/api/contact", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        });
 
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      window.open(mailtoUrl, "_blank");
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success) {
+            savedToDb = true;
+          }
+        }
+      } catch {
+        // Fallback for static hosting like GitHub Pages
+      }
+
+      if (!savedToDb) {
+        // Open mail client as graceful fallback
+        const mailtoUrl = `mailto:anish947173@gmail.com?subject=${encodeURIComponent(
+          `Portfolio Inquiry: ${formData.projectType} from ${formData.name}`
+        )}&body=${encodeURIComponent(
+          `Hi Anish,\n\nMy name is ${formData.name} (${formData.email}).\nProject Type: ${formData.projectType}\nBudget: ${formData.budget}\n\nMessage:\n${formData.message}`
+        )}`;
+        window.open(mailtoUrl, "_blank");
+      }
 
       setIsSubmitted(true);
       setFormData({

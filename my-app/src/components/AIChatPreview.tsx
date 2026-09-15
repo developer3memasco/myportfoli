@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
+import anishImg from "../../public/anish.png";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Bot,
@@ -181,7 +182,7 @@ export const AIChatPreview: React.FC = () => {
                 <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-tr from-cyan-500 via-purple-600 to-pink-500 p-[2px] flex items-center justify-center shadow-[0_0_20px_rgba(56,189,248,0.35)] transition-transform duration-300 group-hover:scale-105">
                   <div className="w-full h-full rounded-[14px] overflow-hidden bg-[#0a0b12] relative">
                     <Image
-                      src="/anish.png"
+                      src={anishImg}
                       alt="Anish Sharma - AI Assistant"
                       width={44}
                       height={44}
@@ -265,7 +266,7 @@ export const AIChatPreview: React.FC = () => {
                     ) : (
                       <div className="w-full h-full rounded-[11px] overflow-hidden bg-[#0c0d16] relative">
                         <Image
-                          src="/anish.png"
+                          src={anishImg}
                           alt="Anish"
                           width={32}
                           height={32}

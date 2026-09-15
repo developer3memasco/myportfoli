@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
+import anishImg from "../../public/anish.png";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Sparkles,
@@ -28,7 +29,7 @@ interface LeaderboardUser {
   rank: number;
   name: string;
   username: string;
-  avatar: string;
+  avatar: string | StaticImageData;
   points: number;
   referrals: number;
   tier: "Grand Master" | "Diamond VIP" | "Gold Creator" | "Silver Pro";
@@ -54,7 +55,7 @@ const initialLeaderboard: LeaderboardUser[] = [
     rank: 2,
     name: "Anish Sharma",
     username: "@dev_anish",
-    avatar: "/anish.png",
+    avatar: anishImg,
     points: 12400,
     referrals: 118,
     tier: "Diamond VIP",

@@ -3,6 +3,9 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import anishImg from "../../../public/anish.png";
+import aiEngineImg from "../../../public/viralgaraj/ai-engine.jpg";
+import cloudScaleImg from "../../../public/viralgaraj/cloud-scale.jpg";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Sparkles,
@@ -301,7 +304,7 @@ cluster.on('anomaly_detected', autoRemediate);`}
                 {/* 3D Illustration Container */}
                 <div className="relative w-full h-64 sm:h-72 rounded-2xl overflow-hidden mb-6 border border-cyan-500/30 shadow-2xl group-hover:border-cyan-400/60 transition-colors">
                   <Image
-                    src="/viralgaraj/ai-engine.jpg"
+                    src={aiEngineImg}
                     alt="Autonomous Neural AI Core"
                     fill
                     sizes="(max-width: 768px) 100vw, 50vw"
@@ -384,7 +387,7 @@ cluster.on('anomaly_detected', autoRemediate);`}
                 {/* 3D Illustration Container */}
                 <div className="relative w-full h-64 sm:h-72 rounded-2xl overflow-hidden mb-6 border border-amber-500/30 shadow-2xl group-hover:border-amber-400/60 transition-colors">
                   <Image
-                    src="/viralgaraj/cloud-scale.jpg"
+                    src={cloudScaleImg}
                     alt="Quantum Cloud Infrastructure"
                     fill
                     sizes="(max-width: 768px) 100vw, 50vw"
@@ -537,7 +540,7 @@ cluster.on('anomaly_detected', autoRemediate);`}
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-xl overflow-hidden border border-purple-500/40 relative shadow-md">
                         <Image
-                          src="/anish.png"
+                          src={anishImg}
                           alt="Anish Sharma - Lead AI Architect"
                           width={40}
                           height={40}
