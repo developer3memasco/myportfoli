@@ -1,7 +1,9 @@
 import React from "react";
 
+export type IconProps = React.ComponentPropsWithoutRef<"svg">;
+
 export const Icons = {
-  github: (props: React.SVGProps<SVGSVGElement>) => (
+  github: (props: IconProps) => (
     <svg
       viewBox="0 0 24 24"
       width="24"
@@ -17,7 +19,7 @@ export const Icons = {
       <path d="M9 18c-4.51 2-5-2-7-2" />
     </svg>
   ),
-  linkedin: (props: React.SVGProps<SVGSVGElement>) => (
+  linkedin: (props: IconProps) => (
     <svg
       viewBox="0 0 24 24"
       width="24"
@@ -34,7 +36,7 @@ export const Icons = {
       <circle cx="4" cy="4" r="2" />
     </svg>
   ),
-  x: (props: React.SVGProps<SVGSVGElement>) => (
+  x: (props: IconProps) => (
     <svg
       viewBox="0 0 24 24"
       width="24"
@@ -50,7 +52,7 @@ export const Icons = {
       <path d="M4 20l6.768-6.768m2.464-2.464l6.768-6.768" />
     </svg>
   ),
-  discord: (props: React.SVGProps<SVGSVGElement>) => (
+  discord: (props: IconProps) => (
     <svg
       viewBox="0 0 24 24"
       width="24"
