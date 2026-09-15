@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import profileImg from "../../public/profile.png";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -16,12 +17,14 @@ import {
   Send,
   User,
   Briefcase,
+  Flame,
 } from "lucide-react";
 
 interface NavItem {
   label: string;
   href: string;
   icon: React.ComponentType<{ className?: string }>;
+  isExternalPage?: boolean;
 }
 
 const navItems: NavItem[] = [
@@ -29,6 +32,7 @@ const navItems: NavItem[] = [
   { label: "About", href: "#about", icon: User },
   { label: "Skills", href: "#skills", icon: Layers },
   { label: "Projects", href: "#projects", icon: Code2 },
+  { label: "Raj Viral", href: "/rajviral", icon: Flame, isExternalPage: true },
   { label: "AI Copilot", href: "#ai-demo", icon: Bot },
   { label: "Experience", href: "#experience", icon: Briefcase },
   { label: "Contact", href: "#contact", icon: Send },
@@ -97,17 +101,27 @@ export const Navbar: React.FC = () => {
         {/* Desktop Nav Items */}
         <div className="hidden lg:flex items-center gap-1 bg-[#141522]/60 p-1 rounded-full border border-white/5 backdrop-blur-lg">
           {navItems.map((item) => {
-            const isActive = activeSection === item.href.substring(1);
+            const isActive = !item.isExternalPage && activeSection === item.href.substring(1);
+            const className = `relative px-3.5 py-1.5 text-xs font-medium transition-colors rounded-full ${
+              isActive
+                ? "text-white font-semibold"
+                : item.isExternalPage
+                ? "text-purple-300 hover:text-white hover:bg-purple-500/10 font-semibold"
+                : "text-zinc-400 hover:text-zinc-100 hover:bg-white/5"
+            }`;
+
+            if (item.href.startsWith("/")) {
+              return (
+                <Link key={item.label} href={item.href} className={className}>
+                  <span className="relative z-10 flex items-center gap-1.5">
+                    {item.label}
+                  </span>
+                </Link>
+              );
+            }
+
             return (
-              <a
-                key={item.label}
-                href={item.href}
-                className={`relative px-3.5 py-1.5 text-xs font-medium transition-colors rounded-full ${
-                  isActive
-                    ? "text-white font-semibold"
-                    : "text-zinc-400 hover:text-zinc-100 hover:bg-white/5"
-                }`}
-              >
+              <a key={item.label} href={item.href} className={className}>
                 {isActive && (
                   <motion.div
                     layoutId="activeNavPill"
@@ -190,17 +204,35 @@ export const Navbar: React.FC = () => {
             <div className="grid grid-cols-2 gap-2 py-1">
               {navItems.map((item) => {
                 const Icon = item.icon;
-                const isActive = activeSection === item.href.substring(1);
+                const isActive = !item.isExternalPage && activeSection === item.href.substring(1);
+                const className = `flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium transition-all ${
+                  isActive
+                    ? "bg-purple-600/20 text-purple-300 border border-purple-500/30"
+                    : item.isExternalPage
+                    ? "bg-purple-500/10 text-purple-300 hover:bg-purple-500/20 border border-purple-500/20 font-semibold"
+                    : "text-zinc-300 hover:bg-white/5 hover:text-white border border-transparent"
+                }`;
+
+                if (item.href.startsWith("/")) {
+                  return (
+                    <Link
+                      key={item.label}
+                      href={item.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={className}
+                    >
+                      <Icon className="w-4 h-4 text-purple-400" />
+                      <span>{item.label}</span>
+                    </Link>
+                  );
+                }
+
                 return (
                   <a
                     key={item.label}
                     href={item.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium transition-all ${
-                      isActive
-                        ? "bg-purple-600/20 text-purple-300 border border-purple-500/30"
-                        : "text-zinc-300 hover:bg-white/5 hover:text-white border border-transparent"
-                    }`}
+                    className={className}
                   >
                     <Icon className="w-4 h-4 text-zinc-400" />
                     <span>{item.label}</span>
