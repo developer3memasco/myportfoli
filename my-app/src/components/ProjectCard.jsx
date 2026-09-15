@@ -1,36 +1,72 @@
+"use client";
+
 import React, { useState } from "react";
 import { Button } from "./ui/Button";
 import { Badge } from "./ui/Badge";
-import { CheckCircle2, Copy, Check, Terminal, Sparkles } from "lucide-react";
-import { Icons } from "./Icons";
+import { CheckCircle2, Copy, Check, Terminal, Sparkles, ChevronRight } from "lucide-react";
+
+const escapeHtml = (str) =>
+  str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+const highlightCodeLine = (line) => {
+  const tokenRegex = /(\/\/[^\n]*)|("[^"\\]*(?:\\.[^"\\]*)*"|'[^'\\]*(?:\\.[^'\\]*)*'|`[^`\\]*(?:\\.[^`\\]*)*`)|(\b(?:import|export|default|async|function|const|let|var|return|new|await|from|useMemo|filter|includes)\b)|(\b[A-Z][a-zA-Z0-9_]*\b)|([{}[\]()=>?:;,])/g;
+
+  let lastIndex = 0;
+  let html = "";
+  let match;
+
+  while ((match = tokenRegex.exec(line)) !== null) {
+    if (match.index > lastIndex) {
+      html += escapeHtml(line.slice(lastIndex, match.index));
+    }
+
+    const [, comment, str, keyword, capId, symbol] = match;
+
+    if (comment) {
+      html += `<span class="text-slate-500 italic">${escapeHtml(comment)}</span>`;
+    } else if (str) {
+      html += `<span class="text-emerald-300">${escapeHtml(str)}</span>`;
+    } else if (keyword) {
+      html += `<span class="text-purple-400 font-semibold">${escapeHtml(keyword)}</span>`;
+    } else if (capId) {
+      html += `<span class="text-amber-300 font-medium">${escapeHtml(capId)}</span>`;
+    } else if (symbol) {
+      html += `<span class="text-slate-400">${escapeHtml(symbol)}</span>`;
+    }
+
+    lastIndex = tokenRegex.lastIndex;
+  }
+
+  if (lastIndex < line.length) {
+    html += escapeHtml(line.slice(lastIndex));
+  }
+
+  return html;
+};
 
 /**
  * Modern Developer Portfolio Project Card Component
- *
- * @param {Object} props
- * @param {string} props.title - Project title
- * @param {string} [props.subtitle] - Project subtitle or category
- * @param {string} props.description - Detailed project description
- * @param {Object} [props.status] - Status object { label: string, variant: string, pulse: boolean }
- * @param {Object} [props.codeSnippet] - Code snippet object { code: string, language: string, fileName: string }
- * @param {Array<string|{title: string, desc?: string}>} [props.features] - Feature bullets
- * @param {Array<string|{name: string, variant?: string}>} [props.tags] - Tech stack tags
- * @param {Array<Object>} [props.actions] - List of action button configurations
- * @param {string} [props.className] - Additional wrapper class names
  */
 export default function ProjectCard({
   title,
   subtitle,
   description,
-  status = { label: "Production Ready", variant: "live", pulse: true },
+  status = { label: "Sub-Second Load", variant: "live", pulse: true },
   codeSnippet = {
-    fileName: "stream-pipeline.ts",
+    fileName: "ecommerce-dispatcher.ts",
     language: "TypeScript",
-    code: `import { createAgent, OpenAIStream } from '@ai/sdk';\n\nexport async function POST(req: Request) {\n  const { prompt } = await req.json();\n  const agent = new DeveloperAgent({ model: 'gpt-4o' });\n  const stream = await agent.streamTask({ prompt });\n  return new Response(stream.toReadableStream());\n}`,
+    code: `// Dynamic Filter & Cart Dispatcher\nconst filteredProducts = useMemo(() => {\n  return products.filter(p => \n    p.category.includes(selectedCategory) && \n    p.price <= maxBudget\n  );\n}, [products, selectedCategory, maxBudget]);`,
   },
   features = [],
   tags = [],
   actions = [],
+  detailsHref,
+  onDetailsClick,
   className = "",
 }) {
   const [copied, setCopied] = useState(false);
@@ -46,30 +82,12 @@ export default function ProjectCard({
     }
   };
 
-  // Helper to colorize basic code keywords for demo aesthetics
   const renderFormattedCode = (rawCode) => {
     if (!rawCode) return null;
     const lines = rawCode.split("\n");
 
     return lines.map((line, idx) => {
-      // Basic keyword token highlighting
-      const formattedLine = line
-        .replace(
-          /\b(import|export|default|async|function|const|let|var|return|new|await|from)\b/g,
-          '<span class="text-purple-400 font-semibold">$1</span>'
-        )
-        .replace(
-          /('[^']*'|"[^"]*"|`[^`]*`)/g,
-          '<span class="text-emerald-300">$1</span>'
-        )
-        .replace(
-          /({|}|\[|\]|\(|\))/g,
-          '<span class="text-slate-400">$1</span>'
-        )
-        .replace(
-          /\b([A-Z][a-zA-Z0-9_]*)\b/g,
-          '<span class="text-amber-300 font-medium">$1</span>'
-        );
+      const formattedHtml = highlightCodeLine(line);
 
       return (
         <div key={idx} className="table-row font-mono text-xs leading-6">
@@ -78,7 +96,7 @@ export default function ProjectCard({
           </span>
           <span
             className="table-cell whitespace-pre text-slate-200"
-            dangerouslySetInnerHTML={{ __html: formattedLine }}
+            dangerouslySetInnerHTML={{ __html: formattedHtml }}
           />
         </div>
       );
@@ -89,14 +107,14 @@ export default function ProjectCard({
     <article
       className={`group relative w-full overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-950/80 p-6 md:p-8 backdrop-blur-xl shadow-2xl transition-all duration-300 hover:border-violet-500/40 hover:shadow-[0_0_50px_-12px_rgba(124,58,237,0.25)] ${className}`}
     >
-      {/* Background ambient ambient gradient glows */}
+      {/* Background ambient gradient glows */}
       <div className="pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full bg-violet-600/10 blur-3xl transition-opacity duration-500 group-hover:opacity-100" />
       <div className="pointer-events-none absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-cyan-600/10 blur-3xl transition-opacity duration-500 group-hover:opacity-100" />
 
       {/* Top Section: Dedicated Code Snippet Display Box */}
       {codeSnippet && (
         <div className="relative mb-6 overflow-hidden rounded-xl border border-slate-800/90 bg-slate-900/90 shadow-inner">
-          {/* Terminal Top Window Bar */}
+          {/* Terminal Window Header */}
           <div className="flex items-center justify-between border-b border-slate-800/80 bg-slate-950/90 px-4 py-2.5">
             <div className="flex items-center space-x-2">
               <span className="h-3 w-3 rounded-full bg-rose-500/80 border border-rose-600/40 inline-block" />
@@ -136,7 +154,7 @@ export default function ProjectCard({
           </div>
 
           {/* Code Body Container */}
-          <div className="max-h-56 overflow-x-auto overflow-y-auto p-4 bg-slate-950/70 scrollbar-thin scrollbar-thumb-slate-800">
+          <div className="max-h-56 overflow-x-auto overflow-y-auto p-4 bg-slate-950/70">
             <div className="table min-w-full font-mono text-xs">
               {renderFormattedCode(codeSnippet.code)}
             </div>
@@ -175,7 +193,7 @@ export default function ProjectCard({
         {features && features.length > 0 && (
           <div className="pt-2">
             <h4 className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-400 mb-2.5">
-              Key Capabilities
+              Key Capabilities & Highlights
             </h4>
             <ul className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
               {features.map((feature, idx) => {
@@ -185,7 +203,7 @@ export default function ProjectCard({
 
                 return (
                   <li key={idx} className="flex items-start gap-2.5">
-                    <CheckCircle2 className="h-4 w-4 shrink-0 text-cyan-400 mt-0.5" />
+                    <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-400 mt-0.5" />
                     <div className="text-xs leading-tight">
                       <span className="font-medium text-slate-200">{featTitle}</span>
                       {featDesc && (
@@ -218,8 +236,8 @@ export default function ProjectCard({
       </div>
 
       {/* Bottom Action Bar */}
-      {actions && actions.length > 0 && (
-        <div className="mt-6 flex flex-wrap items-center gap-3 pt-4 border-t border-slate-800/80">
+      <div className="mt-6 flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-800/80">
+        <div className="flex flex-wrap items-center gap-3">
           {actions.map((action, idx) => (
             <Button
               key={idx}
@@ -235,7 +253,18 @@ export default function ProjectCard({
             </Button>
           ))}
         </div>
-      )}
+
+        {(detailsHref || onDetailsClick) && (
+          <a
+            href={detailsHref || "#"}
+            onClick={onDetailsClick}
+            className="inline-flex items-center gap-1 text-xs font-mono text-slate-400 hover:text-violet-300 transition-colors"
+          >
+            <span>Details</span>
+            <ChevronRight className="h-3.5 w-3.5" />
+          </a>
+        )}
+      </div>
     </article>
   );
 }

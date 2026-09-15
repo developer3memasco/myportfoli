@@ -1,7 +1,9 @@
+"use client";
+
 import React, { useState } from "react";
 import { Button, ButtonVariant, ButtonSize } from "./ui/Button";
 import { Badge, BadgeVariant } from "./ui/Badge";
-import { CheckCircle2, Copy, Check, Terminal, Sparkles } from "lucide-react";
+import { CheckCircle2, Copy, Check, Terminal, Sparkles, ChevronRight } from "lucide-react";
 
 export interface CodeSnippetData {
   fileName?: string;
@@ -45,22 +47,70 @@ export interface ProjectCardProps {
   features?: Array<string | FeatureItem>;
   tags?: Array<string | TagItem>;
   actions?: ActionItem[];
+  detailsHref?: string;
+  onDetailsClick?: () => void;
   className?: string;
 }
+
+const escapeHtml = (str: string) =>
+  str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+const highlightCodeLine = (line: string) => {
+  const tokenRegex = /(\/\/[^\n]*)|("[^"\\]*(?:\\.[^"\\]*)*"|'[^'\\]*(?:\\.[^'\\]*)*'|`[^`\\]*(?:\\.[^`\\]*)*`)|(\b(?:import|export|default|async|function|const|let|var|return|new|await|from|useMemo|filter|includes)\b)|(\b[A-Z][a-zA-Z0-9_]*\b)|([{}[\]()=>?:;,])/g;
+
+  let lastIndex = 0;
+  let html = "";
+  let match: RegExpExecArray | null;
+
+  while ((match = tokenRegex.exec(line)) !== null) {
+    if (match.index > lastIndex) {
+      html += escapeHtml(line.slice(lastIndex, match.index));
+    }
+
+    const [, comment, str, keyword, capId, symbol] = match;
+
+    if (comment) {
+      html += `<span class="text-slate-500 italic">${escapeHtml(comment)}</span>`;
+    } else if (str) {
+      html += `<span class="text-emerald-300">${escapeHtml(str)}</span>`;
+    } else if (keyword) {
+      html += `<span class="text-purple-400 font-semibold">${escapeHtml(keyword)}</span>`;
+    } else if (capId) {
+      html += `<span class="text-amber-300 font-medium">${escapeHtml(capId)}</span>`;
+    } else if (symbol) {
+      html += `<span class="text-slate-400">${escapeHtml(symbol)}</span>`;
+    }
+
+    lastIndex = tokenRegex.lastIndex;
+  }
+
+  if (lastIndex < line.length) {
+    html += escapeHtml(line.slice(lastIndex));
+  }
+
+  return html;
+};
 
 export const ProjectCard: React.FC<ProjectCardProps> = ({
   title,
   subtitle,
   description,
-  status = { label: "Production Ready", variant: "live", pulse: true },
+  status = { label: "Sub-Second Load", variant: "live", pulse: true },
   codeSnippet = {
-    fileName: "stream-pipeline.ts",
+    fileName: "ecommerce-dispatcher.ts",
     language: "TypeScript",
-    code: `import { createAgent, OpenAIStream } from '@ai/sdk';\n\nexport async function POST(req: Request) {\n  const { prompt } = await req.json();\n  const agent = new DeveloperAgent({ model: 'gpt-4o' });\n  const stream = await agent.streamTask({ prompt });\n  return new Response(stream.toReadableStream());\n}`,
+    code: `// Dynamic Filter & Cart Dispatcher\nconst filteredProducts = useMemo(() => {\n  return products.filter(p => \n    p.category.includes(selectedCategory) && \n    p.price <= maxBudget\n  );\n}, [products, selectedCategory, maxBudget]);`,
   },
   features = [],
   tags = [],
   actions = [],
+  detailsHref,
+  onDetailsClick,
   className = "",
 }) => {
   const [copied, setCopied] = useState(false);
@@ -81,23 +131,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
     const lines = rawCode.split("\n");
 
     return lines.map((line, idx) => {
-      const formattedLine = line
-        .replace(
-          /\b(import|export|default|async|function|const|let|var|return|new|await|from)\b/g,
-          '<span class="text-purple-400 font-semibold">$1</span>'
-        )
-        .replace(
-          /('[^']*'|"[^"]*"|`[^`]*`)/g,
-          '<span class="text-emerald-300">$1</span>'
-        )
-        .replace(
-          /({|}|\[|\]|\(|\))/g,
-          '<span class="text-slate-400">$1</span>'
-        )
-        .replace(
-          /\b([A-Z][a-zA-Z0-9_]*)\b/g,
-          '<span class="text-amber-300 font-medium">$1</span>'
-        );
+      const formattedHtml = highlightCodeLine(line);
 
       return (
         <div key={idx} className="table-row font-mono text-xs leading-6">
@@ -106,7 +140,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           </span>
           <span
             className="table-cell whitespace-pre text-slate-200"
-            dangerouslySetInnerHTML={{ __html: formattedLine }}
+            dangerouslySetInnerHTML={{ __html: formattedHtml }}
           />
         </div>
       );
@@ -203,7 +237,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
         {features && features.length > 0 && (
           <div className="pt-2">
             <h4 className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-400 mb-2.5">
-              Key Capabilities
+              Key Capabilities & Highlights
             </h4>
             <ul className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
               {features.map((feature, idx) => {
@@ -213,7 +247,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
 
                 return (
                   <li key={idx} className="flex items-start gap-2.5">
-                    <CheckCircle2 className="h-4 w-4 shrink-0 text-cyan-400 mt-0.5" />
+                    <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-400 mt-0.5" />
                     <div className="text-xs leading-tight">
                       <span className="font-medium text-slate-200">{featTitle}</span>
                       {featDesc && (
@@ -246,8 +280,8 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
       </div>
 
       {/* Bottom Action Bar */}
-      {actions && actions.length > 0 && (
-        <div className="mt-6 flex flex-wrap items-center gap-3 pt-4 border-t border-slate-800/80">
+      <div className="mt-6 flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-800/80">
+        <div className="flex flex-wrap items-center gap-3">
           {actions.map((action, idx) => (
             <Button
               key={idx}
@@ -263,7 +297,18 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             </Button>
           ))}
         </div>
-      )}
+
+        {(detailsHref || onDetailsClick) && (
+          <a
+            href={detailsHref || "#"}
+            onClick={onDetailsClick}
+            className="inline-flex items-center gap-1 text-xs font-mono text-slate-400 hover:text-violet-300 transition-colors"
+          >
+            <span>Details</span>
+            <ChevronRight className="h-3.5 w-3.5" />
+          </a>
+        )}
+      </div>
     </article>
   );
 };

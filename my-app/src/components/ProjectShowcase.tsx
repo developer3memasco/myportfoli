@@ -64,13 +64,13 @@ export async function executeWorkflow(task: TaskRequest) {
     actions: [
       {
         label: "Live Playground",
-        href: "https://demo.example.com",
+        href: "/rajviral",
         variant: "primary",
         iconRight: <ExternalLink className="h-4 w-4" />,
       },
       {
         label: "GitHub Source",
-        href: "https://github.com/example/omniflow",
+        href: "https://github.com/developer3memasco/myportfoli",
         variant: "secondary",
         icon: <Icons.github className="h-4 w-4" />,
       },
